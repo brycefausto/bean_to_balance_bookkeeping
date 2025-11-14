@@ -1,0 +1,134 @@
+model Bookkeeper {
+  id           String   @id @default(cuid())
+  expertise    String?
+  availability String?
+  rates        Float?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String  @unique @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model JournalEntry {
+  id          String      @id @default(cuid())
+  date        DateTime
+  description String?
+  journalType JournalType
+  entries     EntryLine[]
+  posted      Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  userId    String  @map("userId")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model EntryLine {
+  id              String       @id @default(cuid())
+  journalEntryId  String
+  journalEntry    JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  date            DateTime
+  bookAccountId   String
+  bookAccount     BookAccount  @relation(fields: [bookAccountId], references: [id], onDelete: Cascade)
+  bookAccountCode String
+  debit           Float?       @default(0)
+  credit          Float?       @default(0)
+  ARLedger        ARLedger[]
+  APLedger        APLedger[]
+  Inventory       Inventory?   @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  inventoryId     String?
+  Payroll         Payroll[]
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  description     String?
+  postRef         String?
+
+  userId String @map("userId")
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("Entry")
+}
+
+model Customer {
+  id        String     @id @default(cuid())
+  name      String
+  arLedger  ARLedger[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Vendor {
+  id        String     @id @default(cuid())
+  name      String
+  apLedger  APLedger[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model ARLedger {
+  id         String    @id @default(cuid())
+  customerId String
+  customer   Customer  @relation(fields: [customerId], references: [id])
+  entryId    String
+  entry      EntryLine @relation(fields: [entryId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model APLedger {
+  id        String    @id @default(cuid())
+  vendorId  String
+  vendor    Vendor    @relation(fields: [vendorId], references: [id])
+  entryId   String
+  entry     EntryLine @relation(fields: [entryId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Inventory {
+  id           String      @id @default(cuid())
+  itemName     String
+  sku          String      @unique
+  quantity     Int
+  cost         Float
+  salesEntries EntryLine[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Payroll {
+  id        String    @id @default(cuid())
+  employee  String
+  grossPay  Float
+  netPay    Float
+  date      DateTime
+  entryId   String
+  entry     EntryLine @relation(fields: [entryId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+enum JournalType {
+  GENERAL
+  SALES
+  CASH_RECEIPT
+  PURCHASE
+  CASH_DISBURSEMENT
+}

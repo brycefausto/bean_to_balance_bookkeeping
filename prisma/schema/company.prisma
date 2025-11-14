@@ -1,0 +1,21 @@
+model Company {
+  id               String               @id @default(cuid())
+  name             String
+  email            String?
+  image            String?
+  phone            String?
+  address          String?
+  bookkeepers      Bookkeeper[]
+  bookAccounts     BookAccount[]
+  journalEntries   JournalEntry[]
+  customers        Customer[]
+  vendors          Vendor[]
+  incomeStatements FinancialStatement[]
+  inventories      Inventory[]
+  payrolls         Payroll[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

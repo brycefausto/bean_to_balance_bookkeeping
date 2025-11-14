@@ -1,0 +1,19 @@
+model GeneralLedger {
+  id             String         @id @default(cuid())
+  date           DateTime
+  item           String?
+  postRef        String?
+  debit          Float?         @default(0)
+  credit         Float?         @default(0)
+  balance        Float?         @default(0)
+  bookAccountId  String
+  bookAccount    BookAccount    @relation(fields: [bookAccountId], references: [id])
+  ledgerCategory LedgerCategory
+  createdAt      DateTime       @default(now())
+}
+
+enum LedgerCategory {
+  JOURNAL_ENTRY
+  ADJUSTMENT
+  CLOSING
+}

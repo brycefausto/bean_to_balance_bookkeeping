@@ -1,0 +1,19 @@
+model FinancialStatement {
+  id         String          @id @default(cuid())
+  companyId  String
+  company    Company         @relation(fields: [companyId], references: [id])
+  yearEnding Int
+  lineItems  StatementLine[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model StatementLine {
+  id                   String @id @default(cuid())
+  financialStatementId String @map("financialStatementId")
+  bookAccountId        String
+  amount               Float
+
+  financialStatement FinancialStatement @relation(fields: [financialStatementId], references: [id])
+  bookAccount        BookAccount        @relation(fields: [bookAccountId], references: [id])
+}

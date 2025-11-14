@@ -1,0 +1,34 @@
+model BookAccount {
+  id              String      @id @default(cuid())
+  code            String
+  name            String
+  accountType     AccountType
+  normalSide      NormalSide
+  description     String?
+  financialReport String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  userId    String  @map("userId")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyId String  @map("companyId")
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  entries        EntryLine[]
+  statementLine  StatementLine[]
+  generalLedgers GeneralLedger[]
+}
+
+enum AccountType {
+  ASSET
+  LIABILITY
+  EQUITY
+  REVENUE
+  EXPENSE
+}
+
+enum NormalSide {
+  DEBIT
+  CREDIT
+  ANY
+}

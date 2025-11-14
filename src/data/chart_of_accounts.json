@@ -1,0 +1,386 @@
+[
+  {
+    "code": "111",
+    "name": "Cash",
+    "description": "Money available on hand or in bank",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "113",
+    "name": "Accounts Receivable",
+    "description": "Amounts collectible from customers",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "115",
+    "name": "Merchandise Inventory",
+    "description": "Goods held for resale",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "116",
+    "name": "Prepaid Rent",
+    "description": "Rent paid in advance",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "117",
+    "name": "Prepaid Insurance",
+    "description": "Insurance paid in advance",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "118",
+    "name": "Input Vat",
+    "description": "VAT paid on purchases, claimable",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "121",
+    "name": "Store Equipment",
+    "description": "Equipment used in store operations",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "121A",
+    "name": "Accumulated Depreciation - Store Equipment",
+    "description": "Total depreciation of store equipment",
+    "type": "CONTRA-ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "122",
+    "name": "Office Equipment",
+    "description": "Equipment used in office",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "122A",
+    "name": "Accumulated Depreciation - Office Equipment",
+    "description": "Total depreciation of office equipment",
+    "type": "CONTRA-ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "123",
+    "name": "Supplies ",
+    "description": "Office/store supplies available",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "126",
+    "name": "Furniture & Fixtures",
+    "description": "Tables, chairs, cabinets used in business",
+    "type": "ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "126A",
+    "name": "Accumulated Depreciation- Furniture and Fixtures",
+    "description": "Total depreciation of furniture & fixtures",
+    "type": "CONTRA-ASSET",
+    "financialReport": "Balance Sheet",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "211",
+    "name": "Accounts Payable",
+    "description": "Amounts owed to suppliers/creditors",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "212",
+    "name": "Notes Payable",
+    "description": "Written promises to pay creditors",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "213",
+    "name": "Utilities Payable",
+    "description": "Unpaid utility bills",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "214",
+    "name": "Salaries/Wages Payable",
+    "description": "Unpaid salaries or wages",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "215",
+    "name": "SSS, PhilHealth, and Pag-ibig Contributions Payable",
+    "description": "Statutory deductions withheld from employees",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "216",
+    "name": "Unearned Revenue",
+    "description": "Revenue received but not yet earned",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "217",
+    "name": "Output Vat",
+    "description": "VAT collected from customers",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "218",
+    "name": "Withholding Taxes Payable",
+    "description": "Taxes withheld from employees/suppliers",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "219",
+    "name": "Income Tax Payable",
+    "description": "The tax cost of the period.",
+    "type": "LIABILITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "311",
+    "name": "Owner's Capital",
+    "description": "Owner’s initial & additional investment",
+    "type": "EQUITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "Credit "
+  },
+  {
+    "code": "312",
+    "name": "Owner's Drawings",
+    "description": "Withdrawals by owner for personal use",
+    "type": "CONTRA-EQUITY",
+    "financialReport": "Balance Sheet",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "390",
+    "name": "Income Summary",
+    "description": "Temporary account for closing entries",
+    "type": "EQUITY (TEMPORARY)",
+    "financialReport": "Not in FS (closing )",
+    "normalSide": "ANY"
+  },
+  {
+    "code": "411",
+    "name": "Sales",
+    "description": "Revenue from selling goods",
+    "type": "REVENUE",
+    "financialReport": "Income Statement",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "412",
+    "name": "Other Income",
+    "description": "Income not from main operations",
+    "type": "REVENUE",
+    "financialReport": "Income Statement",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "413",
+    "name": "Sales Discounts",
+    "description": "Discounts granted to customers",
+    "type": "CONTRA-REVENUE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "414",
+    "name": "Sales Return & Allowances",
+    "description": "Returns and allowances granted to customers",
+    "type": "CONTRA-REVENUE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "511",
+    "name": "Purchases",
+    "description": "Goods bought for resale",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "512",
+    "name": "Freight In",
+    "description": "Transportation cost of purchases",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "513",
+    "name": "Purchase Returns & Allowances",
+    "description": "Goods returned to suppliers",
+    "type": "CONTRA-EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "514",
+    "name": "Purchase Discounts",
+    "description": "Discounts received from suppliers",
+    "type": "CONTRA-EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "CREDIT"
+  },
+  {
+    "code": "601",
+    "name": "Salaries & Wages Expense",
+    "description": "Cost of employee services",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "602",
+    "name": "SSS, PhilHealth, and Pag-ibig Contributions Expense",
+    "description": "Employer’s share of benefits",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "603",
+    "name": "Rent Expense",
+    "description": "Cost of renting space",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "604",
+    "name": "Utilities Expense",
+    "description": "Electricity, water, internet, etc.",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "605",
+    "name": "Supplies Expense",
+    "description": "Used supplies during the period",
+    "type": "EXPENSE ",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "606",
+    "name": "Depreciation Expense - Furniture & Fixtures",
+    "description": "Periodic depreciation of furniture & fixtures",
+    "type": "EXPENSE ",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "607",
+    "name": "Depreciation Expense - Store Equipment",
+    "description": "Periodic depreciation of store equipment",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "608",
+    "name": "Depreciation Expense - Office Equipment",
+    "description": "Periodic depreciation of office equipment",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "609",
+    "name": "Repair & Maintenance Expense",
+    "description": "Costs of repairing/maintaining assets",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "610",
+    "name": "Insurance Expense",
+    "description": "Expired portion of prepaid insurance",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "611",
+    "name": "Taxes & Licenses Expense",
+    "description": "Business permits, taxes, licenses",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "612",
+    "name": "Interest Expense",
+    "description": "Cost of borrowing money",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "613",
+    "name": "Advertising & Marketing Expense",
+    "description": "Cost of promoting products",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "614",
+    "name": "Miscellaneous Expense",
+    "description": "Minor or irregular expenses",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  },
+  {
+    "code": "615",
+    "name": "Income Tax Expense",
+    "description": "Unpaid taxes owed to the government.",
+    "type": "EXPENSE",
+    "financialReport": "Income Statement",
+    "normalSide": "DEBIT"
+  }
+]
