@@ -1,4 +1,4 @@
-import { checkAuth } from "@/auth";
+import { checkAuth } from "@/lib/auth-utils";
 import { CreateUserDto, UpdateUserDto } from "@/interfaces/user.dto";
 import { hashPassword } from "@/lib/password.utils";
 import { QueryParams } from "@/types";

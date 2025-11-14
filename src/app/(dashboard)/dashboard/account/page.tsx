@@ -1,5 +1,5 @@
 import AccountForm from "@/app/(dashboard)/dashboard/account/account-form";
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 
 export default async function Page() {
   const user = await getUserSession();

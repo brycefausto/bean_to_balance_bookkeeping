@@ -1,4 +1,4 @@
-import { checkAuth } from "@/auth";
+import { checkAuth } from "@/lib/auth-utils";
 import { EntryLineFilter, EntryLinesDto } from "@/interfaces/entry-line.dto";
 import { getStartOfDay } from "@/lib/date.utils";
 import { EntryLine, PrismaClient, Role } from "@prisma/client";

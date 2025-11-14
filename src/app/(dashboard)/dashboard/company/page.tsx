@@ -1,5 +1,5 @@
 import AccountForm from "@/app/(dashboard)/dashboard/account/account-form";
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 import CompanyForm from "./company-form";
 import { companyService } from "@/services/company.service";
 import { notFound, redirect } from "next/navigation";

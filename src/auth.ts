@@ -1,12 +1,9 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { Company, Role } from "@prisma/client";
-import { isArray } from "lodash";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { comparePassword } from "./lib/password.utils";
 import prisma from "./lib/prisma";
-import { userService } from "./services/user.service";
-
 declare module "next-auth" {
   interface User {
     id: string;
@@ -14,7 +11,6 @@ declare module "next-auth" {
     company?: Company;
   }
 }
-
 export class CustomAuthError extends CredentialsSignin {
   constructor(code: string) {
     super();
@@ -118,37 +114,3 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
   },
 });
-
-function checkRoles(role: Role, requiredRoles?: Role | Role[]) {
-  if (isArray(requiredRoles)) {
-    return requiredRoles.includes(role);
-  } else {
-    return requiredRoles == role;
-  }
-}
-
-export async function checkAuth(...requiredRoles: Role[]) {
-  const session = await auth();
-  const checkRole =
-    requiredRoles && session?.user?.role
-      ? checkRoles(session?.user?.role, requiredRoles)
-      : true;
-
-  if (!session || !checkRole) {
-    throw new Error("Unauthorized");
-  }
-}
-
-export async function getUserSession() {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return null;
-  }
-  const user = await userService.findById(session.user.id);
-  if (user == null) {
-    console.log("The user is null");
-    return null;
-  }
-
-  return user;
-}

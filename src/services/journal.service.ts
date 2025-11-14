@@ -1,4 +1,4 @@
-import { checkAuth } from "@/auth";
+import { checkAuth } from "@/lib/auth-utils";
 import {
   CreateJournalEntryDto,
   JournalEntryFilter,

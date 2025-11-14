@@ -1,6 +1,6 @@
 "use server";
 
-import { checkAuth } from "@/auth";
+import { checkAuth } from "@/lib/auth-utils";
 import { createCRUDMessage } from "@/lib/string.utils";
 import { BookAccountData } from "@/schemas/book-account";
 import { bookAccountService } from "@/services/book-account.service";

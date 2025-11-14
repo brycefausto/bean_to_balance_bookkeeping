@@ -1,4 +1,4 @@
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 import { bookAccountService } from "@/services/book-account.service";
 import AccountsList from "./accounts-list";
 import { ParamsWithQuery } from "@/types";

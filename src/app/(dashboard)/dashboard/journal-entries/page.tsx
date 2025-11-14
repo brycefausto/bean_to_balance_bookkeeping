@@ -1,4 +1,4 @@
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 import { fromISODate } from "@/lib/date.utils";
 import { parseSearchParams } from "@/lib/paramUtils";
 import { journalService } from "@/services/journal.service";

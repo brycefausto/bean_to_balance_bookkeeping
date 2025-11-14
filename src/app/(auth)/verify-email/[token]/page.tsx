@@ -11,7 +11,7 @@ import { PageParams } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import { verifyEmailAction } from "@/actions/email-verification";
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 

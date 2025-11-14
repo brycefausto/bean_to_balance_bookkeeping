@@ -1,4 +1,4 @@
-import { getUserSession } from "@/auth";
+import { getUserSession } from "@/lib/auth-utils";
 import { BookAccountProvider } from "@/providers/book-accounts.provider";
 import { bookAccountService } from "@/services/book-account.service";
 import { BookAccount } from "@prisma/client";
