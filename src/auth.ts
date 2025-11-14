@@ -3,18 +3,18 @@ import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import prisma from "./lib/prisma";
 
-type Role = "BOOKKEEPER" | "OWNER" | "ADMIN"
+type Role = "BOOKKEEPER" | "OWNER" | "ADMIN";
 type Company = {
-    name: string;
-    id: string;
-    email: string | null;
-    image: string | null;
-    phone: string | null;
-    address: string | null;
-    createdAt: Date;
-    updatedAt: Date;
-    userId: string;
-}
+  name: string;
+  id: string;
+  email: string | null;
+  image: string | null;
+  phone: string | null;
+  address: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  userId: string;
+};
 declare module "next-auth" {
   interface User {
     id: string;
@@ -30,6 +30,8 @@ export class CustomAuthError extends CredentialsSignin {
     this.stack = undefined;
   }
 }
+
+const baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -47,20 +49,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
 
         try {
-          const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+          console.log("fetching at " + baseUrl);
 
-          const res = await fetch(`${baseUrl}/api/auth/login`, {
+          const res = await fetch(`${baseUrl}/api/custom-login`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            // Edge runtime supports body for POST
             body: JSON.stringify({ email, password }),
           });
 
+          console.log("fetching done");
+
           const data = await res.json();
 
-          // ❌ Invalid credentials → redirect
+          console.log("data", data);
+
           if (!res.ok) {
             throw new CustomAuthError("Invalid Credentials");
           }
