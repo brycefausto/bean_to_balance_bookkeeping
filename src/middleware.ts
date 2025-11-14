@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 
 export default auth((request) => {
   const isLoggedIn = !!request.auth;
+
   const { pathname } = request.nextUrl;
 
   // Redirect authenticated users away from login/signup pages

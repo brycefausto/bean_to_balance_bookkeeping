@@ -1,13 +1,24 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { Company, Role } from "@prisma/client";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { comparePassword } from "./lib/password.utils";
 import prisma from "./lib/prisma";
+
+type Role = "BOOKKEEPER" | "OWNER" | "ADMIN"
+type Company = {
+    name: string;
+    id: string;
+    email: string | null;
+    image: string | null;
+    phone: string | null;
+    address: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+}
 declare module "next-auth" {
   interface User {
     id: string;
-    role?: Role;
+    role?: "BOOKKEEPER" | "OWNER" | "ADMIN";
     company?: Company;
   }
 }
@@ -36,27 +47,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
 
         try {
-          const user = await prisma.user.findUnique({
-            where: { email },
-            include: {
-              company: true,
+          const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+
+          const res = await fetch(`${baseUrl}/api/auth/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
+            // Edge runtime supports body for POST
+            body: JSON.stringify({ email, password }),
           });
 
-          if (!user || !user.password) {
-            console.log("Invalid Credentials");
+          const data = await res.json();
+
+          // ❌ Invalid credentials → redirect
+          if (!res.ok) {
             throw new CustomAuthError("Invalid Credentials");
           }
-          const isValid = await comparePassword(password, user.password);
-          if (!isValid) throw new CustomAuthError("Invalid Credentials");
 
-          return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: user.role,
-            company: user.company ?? undefined,
-          };
+          return data.user;
         } catch (error: any) {
           throw new CustomAuthError(error.message);
         }
