@@ -2,6 +2,7 @@ import { auth } from "@/auth"; // path to your Better Auth server instance
 
 import { ModeToggle } from "@/components/mode-toggle";
 import { Button } from "@/components/ui/button";
+import { APP_NAME } from "@/config/env";
 import { Coffee } from "lucide-react";
 import Link from "next/link";
 
@@ -15,7 +16,7 @@ export default async function HomeHeader() {
           <div className="flex items-center gap-2">
             <Coffee className="h-8 w-8 text-primary" />
             <span className="text-2xl font-bold text-foreground">
-              Bean to Balance
+              {APP_NAME}
             </span>
           </div>
         </Link>
