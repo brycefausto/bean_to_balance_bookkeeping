@@ -28,3 +28,7 @@ export function formatPrice(price: number) {
     currency: "PHP",
   }).format(price);
 }
+
+export function formatSpreadSheetPrice(price: number) {
+  return "PHP " + price.toFixed(2);
+}

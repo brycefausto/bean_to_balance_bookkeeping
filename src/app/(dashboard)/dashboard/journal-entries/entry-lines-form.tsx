@@ -96,7 +96,7 @@ export function EntryLinesForm({
                   colSpan={7}
                   className="h-24 text-center text-muted-foreground"
                 >
-                  No entry lines found.
+                  There are no entry lines. Please enter at least 2 entry lines.
                 </TableCell>
               </TableRow>
             ) : (
@@ -291,14 +291,6 @@ export function EntryLinesForm({
             }
           >
             Add Entry Line
-          </Button>
-
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => handleReset()}
-          >
-            Reset
           </Button>
         </div>
       </div>

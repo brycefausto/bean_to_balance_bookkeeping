@@ -29,6 +29,7 @@ import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { EntryLinesForm } from "../../entry-lines-form";
+import { Button } from "@/components/ui/button";
 
 export interface EditJournalFormProps {
   journalEntry: JournalEntryDto;
@@ -61,6 +62,14 @@ export function EditJournalForm({ journalEntry }: EditJournalFormProps) {
 
   const handleSubmit = (data: JournalEntryData) => {
     startTransition(async () => {
+      if (data.entryLines.length < 2) {
+        toast.error("There should be at least 2 entry lines");
+        return;
+      }
+      if (!isAmountEqual) {
+        toast.error("The total debit and total credit should be equal");
+        return;
+      }
       const { entryLines, ...journalEntryData } = data;
       try {
         if (!_.isEqual(form.formState.defaultValues, journalEntryData)) {
@@ -80,10 +89,6 @@ export function EditJournalForm({ journalEntry }: EditJournalFormProps) {
   };
 
   const saveEntryLines = async (entryLines: EntryLinesArray) => {
-    if (!isAmountEqual) {
-      toast.error("The total debit and total credit should be equal");
-      return;
-    }
     const entryLinesDto: EntryLinesDto = {
       entryLineDtos: entryLines,
       deletedEntryLineIds: deletedIds,
@@ -145,13 +150,6 @@ export function EditJournalForm({ journalEntry }: EditJournalFormProps) {
                     )}
                   </span>
                 </div>
-                <LoadingButton
-                  type="submit"
-                  loading={isPending}
-                  loadingText="Saving..."
-                >
-                  Update Journal Entry
-                </LoadingButton>
                 <EntryLinesForm
                   form={form}
                   onReset={handleResetEntryLines}
@@ -159,6 +157,22 @@ export function EditJournalForm({ journalEntry }: EditJournalFormProps) {
                   setDeletedIds={setDeletedIds}
                   setIsAmountEqual={setIsAmountEqual}
                 />
+                <div className="flex flex-row gap-4">
+                  <LoadingButton
+                    type="submit"
+                    loading={isPending}
+                    loadingText="Saving..."
+                  >
+                    Update Journal Entry
+                  </LoadingButton>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleResetEntryLines}
+                  >
+                    Reset
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>

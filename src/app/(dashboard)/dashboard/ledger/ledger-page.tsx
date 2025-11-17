@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { AccountType } from "@prisma/client";
 import { GeneralLedgerView } from "@/interfaces/general-ledger.dto";
+import { formatPrice } from "@/lib/string.utils";
 
 export interface LedgerPageProps {
   data: GeneralLedgerView[];
@@ -175,7 +176,7 @@ export default function LedgerPage({ data }: LedgerPageProps) {
                       </Badge>
                       <div className="text-right min-w-max">
                         <div className="font-bold text-lg text-foreground">
-                          ${account.balance.toFixed(2)}
+                          {formatPrice(account.balance)}
                         </div>
                         <div className="text-sm text-muted-foreground">
                           Balance
@@ -226,16 +227,16 @@ export default function LedgerPage({ data }: LedgerPageProps) {
                                 </td>
                                 <td className="py-2 px-3 text-right font-mono text-primary">
                                   {entry.debit > 0
-                                    ? `$${entry.debit.toFixed(2)}`
+                                    ? formatPrice(entry.debit)
                                     : "-"}
                                 </td>
                                 <td className="py-2 px-3 text-right font-mono text-accent">
                                   {entry.credit > 0
-                                    ? `$${entry.credit.toFixed(2)}`
+                                    ? formatPrice(entry.credit)
                                     : "-"}
                                 </td>
                                 <td className="py-2 px-3 text-right font-mono font-bold text-foreground">
-                                  ${runningBalance.toFixed(2)}
+                                  {formatPrice(runningBalance)}
                                 </td>
                               </tr>
                             );

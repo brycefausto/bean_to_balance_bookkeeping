@@ -106,7 +106,7 @@ export function EditUserDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {userRoleOptions.map(({ value, label }) => (
-                    <SelectItem value={value}>{label}</SelectItem>
+                    <SelectItem key={value} value={value}>{label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

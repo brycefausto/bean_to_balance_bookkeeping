@@ -77,7 +77,7 @@ export async function updateJournalEntryAction(
 //   }
 // }
 
-export async function findAllAction(
+export async function findAllJournalEntriesAction(
   companyId: string
 ): Promise<ActionResultState<JournalEntryDto[]>> {
   try {
@@ -113,5 +113,22 @@ export async function deleteJournalEntryAction(
   } catch (error: any) {
     console.log(error.message);
     return { message: createCRUDMessage(dataName, "delete", "failed") };
+  }
+}
+
+export async function countJournalEntryAction(
+  companyId: string
+): Promise<ActionResultState<{ count: number }>> {
+  try {
+    const count = await journalService.count(companyId);
+    revalidatePath("/journal-entries");
+
+    return {
+      success: true,
+      data: { count }
+    };
+  } catch (error: any) {
+    console.log(error.message);
+    return { message: createCRUDMessage(dataName, "find", "failed") };
   }
 }

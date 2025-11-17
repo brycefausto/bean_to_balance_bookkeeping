@@ -11,9 +11,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useAuth } from "@/hooks/use-auth";
+import { exportReportsToCSV } from "@/lib/excel-export";
+import { formatPrice } from "@/lib/string.utils";
 import { useBookkeepingStore } from "@/store/bookkeeping-store";
-import { BarChart3, Download } from "lucide-react";
-import Link from "next/link";
+import { Download } from "lucide-react";
 import { useEffect } from "react";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { toast } from "sonner";
@@ -76,6 +77,17 @@ export default function ReportsPage() {
 
   const COLORS = ["#004D7A", "#008C9E", "#00D4FF", "#90EE90", "#FFB347"];
 
+  const handleExportReports = () => {
+    const timestamp = new Date().toISOString().split("T")[0];
+    exportReportsToCSV(
+      trialBalance,
+      accountsByType,
+      totalDebits,
+      totalCredits,
+      timestamp
+    );
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-background to-secondary">
       <main className="mx-auto max-w-7xl px-6 py-8">
@@ -88,7 +100,7 @@ export default function ReportsPage() {
               Trial balance and account analysis
             </p>
           </div>
-          <Button className="gap-2">
+          <Button className="gap-2" onClick={handleExportReports}>
             <Download className="w-4 h-4" />
             Export Report
           </Button>
@@ -110,7 +122,7 @@ export default function ReportsPage() {
                       cy="50%"
                       labelLine={false}
                       label={({ name, value }) =>
-                        `${name}: $${value.toFixed(0)}`
+                        `${name}: ${formatPrice(value)}`
                       }
                       outerRadius={80}
                       fill="#8884d8"
@@ -124,7 +136,7 @@ export default function ReportsPage() {
                       ))}
                     </Pie>
                     <Tooltip
-                      formatter={(value) => `$${Number(value).toFixed(2)}`}
+                      formatter={(value) => `${formatPrice(Number(value))}`}
                     />
                   </PieChart>
                 </ResponsiveContainer>
@@ -151,13 +163,13 @@ export default function ReportsPage() {
                 <div className="flex justify-between items-center p-3 bg-secondary rounded-lg">
                   <span className="text-muted-foreground">Total Debits</span>
                   <span className="font-bold text-lg text-primary">
-                    ${totalDebits.toFixed(2)}
+                    {formatPrice(totalDebits)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-secondary rounded-lg">
                   <span className="text-muted-foreground">Total Credits</span>
                   <span className="font-bold text-lg text-accent">
-                    ${totalCredits.toFixed(2)}
+                    {formatPrice(totalCredits)}
                   </span>
                 </div>
                 <div className="flex justify-between items-center p-3 bg-secondary rounded-lg border-2 border-primary">
@@ -219,14 +231,10 @@ export default function ReportsPage() {
                         {account.name}
                       </td>
                       <td className="py-3 px-3 text-right font-mono">
-                        {account.debit > 0
-                          ? `$${account.debit.toFixed(2)}`
-                          : "-"}
+                        {account.debit > 0 ? formatPrice(account.debit) : "-"}
                       </td>
                       <td className="py-3 px-3 text-right font-mono">
-                        {account.credit > 0
-                          ? `$${account.credit.toFixed(2)}`
-                          : "-"}
+                        {account.credit > 0 ? formatPrice(account.credit) : "-"}
                       </td>
                     </tr>
                   ))}
@@ -235,10 +243,10 @@ export default function ReportsPage() {
                       Totals
                     </td>
                     <td className="py-3 px-3 text-right font-mono text-primary">
-                      ${totalDebits.toFixed(2)}
+                      {formatPrice(totalDebits)}
                     </td>
                     <td className="py-3 px-3 text-right font-mono text-accent">
-                      ${totalCredits.toFixed(2)}
+                      {formatPrice(totalCredits)}
                     </td>
                   </tr>
                 </tbody>

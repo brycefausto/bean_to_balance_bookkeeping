@@ -9,6 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { formatPrice } from "@/lib/string.utils";
 
 export function SectionCards() {
   return (
@@ -17,7 +18,7 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            $1,250.00
+            {formatPrice(1250)}
           </CardTitle>
           <CardAction>
             <Badge variant="outline">

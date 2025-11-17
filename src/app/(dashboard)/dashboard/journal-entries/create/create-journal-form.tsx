@@ -38,6 +38,7 @@ import { toast } from "sonner";
 import { EntryLinesForm } from "../entry-lines-form";
 import { EntryLinesDto } from "@/interfaces/entry-line.dto";
 import { createAndUpdateEntryLinesAction } from "@/actions/entry-line";
+import { Button } from "@/components/ui/button";
 
 export function CreateJournalForm() {
   const { user, company } = useAuth();
@@ -49,16 +50,43 @@ export function CreateJournalForm() {
       description: "",
       journalType: JournalType.GENERAL,
       date: new Date(),
-      entryLines: []
+      entryLines: [
+        {
+          date: new Date(),
+          bookAccountId: "",
+          bookAccountCode: "",
+          description: "",
+          postRef: "",
+          debit: 0,
+          credit: 0,
+        },
+        {
+          date: new Date(),
+          bookAccountId: "",
+          bookAccountCode: "",
+          description: "",
+          postRef: "",
+          debit: 0,
+          credit: 0,
+        },
+      ],
     },
   });
 
   const handleResetEntryLines = () => {
-    form.resetField("entryLines");
+    form.reset();
   };
 
   const handleSubmit = (data: JournalEntryData) => {
     startTransition(async () => {
+      if (data.entryLines.length < 2) {
+        toast.error("There should be at least 2 entry lines");
+        return;
+      }
+      if (!isAmountEqual) {
+        toast.error("The total debit and total credit should be equal");
+        return;
+      }
       const { entryLines, ...journalEntryData } = data;
       try {
         const result = await createJournalEntryAction(
@@ -81,10 +109,6 @@ export function CreateJournalForm() {
     journalEntryId: string,
     entryLines: EntryLinesArray
   ) => {
-    if (!isAmountEqual) {
-      toast.error("The total debit and total credit should be equal");
-      return;
-    }
     const entryLinesDto: EntryLinesDto = {
       entryLineDtos: entryLines,
     };
@@ -159,18 +183,27 @@ export function CreateJournalForm() {
                     )}
                   />
                 </div>
-                <LoadingButton
-                  type="submit"
-                  loading={isPending}
-                  loadingText="Saving..."
-                >
-                  Add Journal Entry
-                </LoadingButton>
                 <EntryLinesForm
                   form={form}
                   onReset={handleResetEntryLines}
                   setIsAmountEqual={setIsAmountEqual}
                 />
+                <div className="flex flex-row gap-4">
+                  <LoadingButton
+                    type="submit"
+                    loading={isPending}
+                    loadingText="Saving..."
+                  >
+                    Add Journal Entry
+                  </LoadingButton>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleResetEntryLines}
+                  >
+                    Reset
+                  </Button>
+                </div>
               </form>
             </Form>
           </CardContent>

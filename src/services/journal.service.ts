@@ -125,6 +125,16 @@ export class JournalService {
     return data;
   }
 
+  async count(companyId: string) {
+    const data = await prisma.journalEntry.count({
+      where: {
+        companyId,
+      },
+    });
+
+    return data;
+  }
+
   async findById(id: string) {
     return prisma.journalEntry.findUnique({
       where: { id },

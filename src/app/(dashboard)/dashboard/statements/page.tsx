@@ -11,6 +11,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
 import { generateExcelFile } from "@/lib/excel-export";
+import { formatPrice } from "@/lib/string.utils";
 import { useBookkeepingStore } from "@/store/bookkeeping-store";
 import { Download } from "lucide-react";
 import { useEffect } from "react";
@@ -100,16 +101,16 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium text-primary">
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
+                                    <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
                     <span>Total Assets</span>
                     <span className="text-primary">
-                      ${balanceSheet.totalAssets.toFixed(2)}
+                      {formatPrice(balanceSheet.totalAssets)}
                     </span>
                   </div>
                 </div>
@@ -125,16 +126,16 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium text-accent">
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-accent/10 rounded-lg p-4 font-bold border-t-2 border-accent">
+                                    <div className="flex justify-between bg-accent/10 rounded-lg p-4 font-bold border-t-2 border-accent">
                     <span>Total Liabilities</span>
                     <span className="text-accent">
-                      ${balanceSheet.totalLiabilities.toFixed(2)}
+                      {formatPrice(balanceSheet.totalLiabilities)}
                     </span>
                   </div>
                 </div>
@@ -150,7 +151,7 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium text-green-600">
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
@@ -159,7 +160,7 @@ export default function StatementsPage() {
                   <div className="flex justify-between bg-green-50 dark:bg-green-950 rounded-lg p-4 font-bold border-t-2 border-green-600">
                     <span>Total Equity</span>
                     <span className="text-green-600">
-                      ${balanceSheet.totalEquity.toFixed(2)}
+                      {formatPrice(balanceSheet.totalEquity)}
                     </span>
                   </div>
                 </div>
@@ -216,16 +217,16 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium text-green-600">
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-green-50 dark:bg-green-950 rounded-lg p-4 font-bold border-t-2 border-green-600">
+                                    <div className="flex justify-between bg-green-50 dark:bg-green-950 rounded-lg p-4 font-bold border-t-2 border-green-600">
                     <span>Total Revenue</span>
                     <span className="text-green-600">
-                      ${incomeStatement.totalRevenue.toFixed(2)}
+                      {formatPrice(incomeStatement.totalRevenue)}
                     </span>
                   </div>
                 </div>
@@ -241,16 +242,16 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium text-red-600">
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-red-50 dark:bg-red-950 rounded-lg p-4 font-bold border-t-2 border-red-600">
+                                    <div className="flex justify-between bg-red-50 dark:bg-red-950 rounded-lg p-4 font-bold border-t-2 border-red-600">
                     <span>Total Expenses</span>
                     <span className="text-red-600">
-                      ${incomeStatement.totalExpenses.toFixed(2)}
+                      {formatPrice(incomeStatement.totalExpenses)}
                     </span>
                   </div>
                 </div>
@@ -266,7 +267,7 @@ export default function StatementsPage() {
                           : "text-red-600"
                       }
                     >
-                      ${incomeStatement.netIncome.toFixed(2)}
+                      {formatPrice(incomeStatement.netIncome)}
                     </span>
                   </div>
                 </div>
@@ -299,16 +300,16 @@ export default function StatementsPage() {
                                 : "text-red-600"
                             }`}
                           >
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
+                                    <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
                     <span>Net Operating Cash Flow</span>
                     <span className="text-primary">
-                      ${cashFlow.totalOperating.toFixed(2)}
+                      {formatPrice(cashFlow.totalOperating)}
                     </span>
                   </div>
                 </div>
@@ -330,16 +331,16 @@ export default function StatementsPage() {
                                 : "text-red-600"
                             }`}
                           >
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
+                                    <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
                     <span>Net Investing Cash Flow</span>
                     <span className="text-primary">
-                      ${cashFlow.totalInvesting.toFixed(2)}
+                      {formatPrice(cashFlow.totalInvesting)}
                     </span>
                   </div>
                 </div>
@@ -361,16 +362,16 @@ export default function StatementsPage() {
                                 : "text-red-600"
                             }`}
                           >
-                            ${(value as number).toFixed(2)}
+                            {formatPrice(value as number)}
                           </span>
                         </div>
                       )
                     )}
                   </div>
-                  <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
+                                    <div className="flex justify-between bg-primary/10 rounded-lg p-4 font-bold border-t-2 border-primary">
                     <span>Net Financing Cash Flow</span>
                     <span className="text-primary">
-                      ${cashFlow.totalFinancing.toFixed(2)}
+                      {formatPrice(cashFlow.totalFinancing)}
                     </span>
                   </div>
                 </div>
@@ -380,19 +381,19 @@ export default function StatementsPage() {
                   <div className="flex justify-between">
                     <span className="text-foreground">Beginning Cash</span>
                     <span className="font-medium">
-                      ${cashFlow.beginningCash.toFixed(2)}
+                      {formatPrice(cashFlow.beginningCash)}
                     </span>
                   </div>
                   <div className="flex justify-between bg-primary/10 rounded-lg p-3 font-bold text-lg">
                     <span>Net Change in Cash</span>
                     <span className="text-primary">
-                      ${cashFlow.netCashFlow.toFixed(2)}
+                      {formatPrice(cashFlow.netCashFlow)}
                     </span>
                   </div>
                   <div className="flex justify-between bg-accent/10 rounded-lg p-3 font-bold text-lg border-t-2 border-accent">
                     <span>Ending Cash</span>
                     <span className="text-accent">
-                      ${cashFlow.endingCash.toFixed(2)}
+                      {formatPrice(cashFlow.endingCash)}
                     </span>
                   </div>
                 </div>
@@ -421,7 +422,7 @@ export default function StatementsPage() {
                         <div key={name} className="flex justify-between">
                           <span className="text-foreground">{name}</span>
                           <span className="font-medium">
-                            ${value.toFixed(2)}
+                            ${formatPrice(value)}
                           </span>
                         </div>
                       )
@@ -429,7 +430,7 @@ export default function StatementsPage() {
                     <div className="flex justify-between bg-primary/10 rounded-lg p-3 font-bold border-t-2 border-primary">
                       <span>Ending Balance</span>
                       <span className="text-primary">
-                        ${equityStatement.commonStock.ending.toFixed(2)}
+                        {formatPrice(equityStatement.commonStock.ending)}
                       </span>
                     </div>
                   </div>
@@ -443,19 +444,19 @@ export default function StatementsPage() {
                     <div className="flex justify-between">
                       <span className="text-foreground">Beginning Balance</span>
                       <span className="font-medium">
-                        ${equityStatement.commonStock.beginning.toFixed(2)}
+                        {formatPrice(equityStatement.commonStock.beginning)}
                       </span>
                     </div>
                     <div className="flex justify-between border-t border-border pt-2">
                       <span className="text-foreground">Add: Changes</span>
                       <span className="font-medium">
-                        ${equityStatement.commonStock.changes.toFixed(2)}
+                        {formatPrice(equityStatement.commonStock.changes)}
                       </span>
                     </div>
                     <div className="flex justify-between bg-primary/10 rounded-lg p-3 font-bold border-t-2 border-primary">
                       <span>Ending Balance</span>
                       <span className="text-primary">
-                        ${equityStatement.commonStock.ending.toFixed(2)}
+                        {formatPrice(equityStatement.commonStock.ending)}
                       </span>
                     </div>
                   </div>
@@ -470,7 +471,7 @@ export default function StatementsPage() {
                     <div className="flex justify-between">
                       <span className="text-foreground">Beginning Balance</span>
                       <span className="font-medium">
-                        ${equityStatement.retainedEarnings.beginning.toFixed(2)}
+                        {formatPrice(equityStatement.retainedEarnings.beginning)}
                       </span>
                     </div>
                     <div className="flex justify-between border-t border-border pt-2">
@@ -482,13 +483,13 @@ export default function StatementsPage() {
                             : "text-red-600"
                         }`}
                       >
-                        ${equityStatement.retainedEarnings.changes.toFixed(2)}
+                        {formatPrice(equityStatement.retainedEarnings.changes)}
                       </span>
                     </div>
                     <div className="flex justify-between bg-primary/10 rounded-lg p-3 font-bold border-t-2 border-primary">
                       <span>Ending Balance</span>
                       <span className="text-primary">
-                        ${equityStatement.retainedEarnings.ending.toFixed(2)}
+                        {formatPrice(equityStatement.retainedEarnings.ending)}
                       </span>
                     </div>
                   </div>
@@ -499,7 +500,7 @@ export default function StatementsPage() {
                   <div className="flex justify-between items-center bg-green-50 dark:bg-green-950 rounded-lg p-4 font-bold text-lg">
                     <span>Total Shareholders' Equity</span>
                     <span className="text-green-600">
-                      ${equityStatement.totalEquity.toFixed(2)}
+                      {formatPrice(equityStatement.totalEquity)}
                     </span>
                   </div>
                 </div>

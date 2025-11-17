@@ -1,4 +1,5 @@
 import { GeneralLedgerView } from "@/interfaces/general-ledger.dto";
+import { JournalEntryDto } from "@/interfaces/journal.dto";
 import { AccountType, BookAccount } from "@prisma/client";
 import { create } from "zustand";
 
@@ -52,6 +53,8 @@ export interface EquityStatement {
 interface BookkeepingStore {
   ledgers: GeneralLedgerView[];
   setLedgers: (ledgers: GeneralLedgerView[]) => void;
+  entries: JournalEntryDto[];
+  setEntries: (entries: JournalEntryDto[]) => void;
   deleteEntry: (id: string) => void;
   getGeneralLedger: () => GeneralLedgerViewData[];
   getBalanceSheet: () => BalanceSheet;
@@ -77,7 +80,9 @@ type GeneralLedgerViewData = {
 
 export const useBookkeepingStore = create<BookkeepingStore>((set, get) => ({
   ledgers: [],
+  entries: [],
   setLedgers: (ledgers: GeneralLedgerView[]) => set({ ledgers: [...ledgers] }),
+  setEntries: (entries: JournalEntryDto[]) => set({ entries: [...entries] }),
   deleteEntry: (id) =>
     set((state) => ({ ledgers: state.ledgers.filter((e) => e.id !== id) })),
   getGeneralLedger: () => {
