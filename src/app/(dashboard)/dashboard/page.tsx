@@ -67,34 +67,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary">
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="w-8 h-8 text-primary" />
-            <h1 className="text-2xl font-bold text-foreground">
-              Bookkeeping System
-            </h1>
-          </div>
-          <nav className="flex gap-2">
-            <Link href="/journal">
-              <Button variant="outline" size="sm">
-                Journal Entries
-              </Button>
-            </Link>
-            <Link href="/ledger">
-              <Button variant="outline" size="sm">
-                General Ledger
-              </Button>
-            </Link>
-            <Link href="/reports">
-              <Button variant="outline" size="sm">
-                Reports
-              </Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
-
       <main className="mx-auto max-w-7xl px-6 py-8">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card>
