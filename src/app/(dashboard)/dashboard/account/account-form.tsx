@@ -2,42 +2,56 @@
 
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 
 import { updateUserAction } from "@/actions/user";
 import { FormFieldInput } from "@/components/form/form-field-input";
 import LoadingButton from "@/components/form/loading-button";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Form } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import {
   UpdateAccountData,
   updateAccountSchema,
 } from "@/schemas/update-account";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
+import _ from "lodash";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ChangePasswordDialog } from "./change-password-dialog";
 import EmailVerificationButton from "./email-verification-button";
-import { Label } from "@/components/ui/label";
-import _ from "lodash";
+import { useRouter } from "next/navigation";
 
 export default function AccountForm({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition();
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const { data: session, update } = useSession();
-
-  const form = useForm<UpdateAccountData>({
-    resolver: zodResolver(updateAccountSchema),
-    defaultValues: {
+  const defaultValues = useMemo(
+    () => ({
       name: user.name ?? "",
       email: user.email ?? "",
       phone: "",
       address: "",
-    },
+      emailVerified: !!user.emailVerified,
+    }),
+    [user]
+  );
+
+  const form = useForm<UpdateAccountData>({
+    resolver: zodResolver(updateAccountSchema),
+    defaultValues,
   });
+  const { reset } = form;
+
+  useEffect(() => {
+    if (defaultValues) {
+      reset(defaultValues);
+    }
+  }, [defaultValues, reset]);
 
   function onSubmit(data: UpdateAccountData) {
     startTransition(async () => {
@@ -54,6 +68,7 @@ export default function AccountForm({ user }: { user: User }) {
             },
           });
           toast.success(result.message || "User updated successfully");
+          // router.push("/dashboard");
         } else {
           toast.error(result.message || "Something went wrong");
         }
@@ -95,10 +110,27 @@ export default function AccountForm({ user }: { user: User }) {
               </FormFieldInput>
               <div className="grid gap-3">
                 <Label>Role</Label>
-                <span className="text-lg font-medium">{_.capitalize(user.role)}</span>
+                <span className="text-lg font-medium">
+                  {_.capitalize(user.role)}
+                </span>
               </div>
 
-              <EmailVerificationButton user={user} />
+              <FormFieldInput
+                control={form.control}
+                name="emailVerified"
+                label="Email Verified"
+                variant="inline"
+                render={(field) => (
+                  <Checkbox
+                    checked={field.value as boolean}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
+
+              {user.role !== Role.ADMIN && (
+                <EmailVerificationButton user={user} />
+              )}
 
               <div className="flex flex-col gap-3">
                 <LoadingButton

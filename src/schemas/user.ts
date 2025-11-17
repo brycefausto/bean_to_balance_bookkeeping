@@ -27,6 +27,7 @@ export const updateUserSchema = z.object({
   role: z.enum(Role).optional(),
   phone: z.string().max(25).optional(),
   address: z.string().max(100).optional(),
+  emailVerified: z.boolean().optional(),
 });
 
 export type UpdateUserData = z.infer<typeof updateUserSchema>;

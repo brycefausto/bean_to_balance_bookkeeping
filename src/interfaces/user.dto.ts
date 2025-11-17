@@ -18,7 +18,7 @@ export interface UpdateUserDto {
   role?: Role;
   phone?: string;
   address?: string;
-  emailVerified?: null;
+  emailVerified?: boolean;
 }
 
 export const userRoleOptions = Object.values(Role).map((value) => ({

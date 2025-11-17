@@ -3,6 +3,7 @@
 import { updateUserAction } from "@/actions/user";
 import { FormFieldInput } from "@/components/form/form-field-input";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -106,11 +107,16 @@ export function EditUserDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {userRoleOptions.map(({ value, label }) => (
-                    <SelectItem key={value} value={value}>{label}</SelectItem>
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </FormFieldInput>
+            <FormFieldInput control={form.control} name="emailVerified" label="Email Verified" variant="inline" render={(field) => (
+              <Checkbox checked={field.value as boolean} onCheckedChange={field.onChange} />
+            )} />
             <DialogFooter>
               <Button
                 type="button"

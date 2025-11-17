@@ -39,6 +39,7 @@ export async function updateUserAction(
       ...data,
     });
     revalidatePath("/users");
+    revalidatePath("/account");
 
     return {
       success: true,

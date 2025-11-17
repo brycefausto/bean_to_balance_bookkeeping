@@ -71,20 +71,26 @@ export class UserService {
   }
 
   // UPDATE
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: string, { emailVerified: emailVerifiedBoolean, ...data }: UpdateUserDto) {
     await checkAuth(Role.ADMIN);
     // Unverify email when the email is updated
     const user = await prisma.user.findUnique({
       where: { id, email: data.email },
     });
-    if (!user) {
-      data.emailVerified = null;
+    let emailVerified = emailVerifiedBoolean ? new Date() : null;
+    if (!user && !emailVerifiedBoolean) {
+      emailVerified = null;
     }
-    if (data.email)
+    if (data.email) {
+      const updateUserDto = {
+        ...data,
+        emailVerified,
+      };
       return prisma.user.update({
         where: { id },
-        data,
+        data: updateUserDto,
       });
+    }
   }
 
   // DELETE

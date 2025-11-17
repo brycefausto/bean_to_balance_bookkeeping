@@ -5,6 +5,7 @@ export const updateAccountSchema = z.object({
   name: z.string().min(2, "Name should be at least 2 characters.").max(50),
   phone: z.string().max(25).optional(),
   address: z.string().max(100).optional(),
+  emailVerified: z.boolean().optional(),
 });
 
 export type UpdateAccountData = z.infer<typeof updateAccountSchema>;
