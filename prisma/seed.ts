@@ -11,6 +11,7 @@ async function main() {
       email: "admin@testmail.com",
       password: await hashPassword("adminpass123"),
       role: Role.ADMIN,
+      emailVerified: new Date()
     },
   });
   if (process.env.NODE_ENV !== "production") {

@@ -125,6 +125,7 @@ export async function seedBookkeepingData(prisma: PrismaClient) {
       email: "john@testmail.com",
       password: await hashPassword("ownerpass123"),
       role: Role.OWNER,
+      emailVerified: new Date(),
     },
   });
   const company = await prisma.company.create({
