@@ -60,7 +60,7 @@ export function CreateCompanyDialog() {
       setOpen(false);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create company"
+        error instanceof Error ? error.message : "Failed to create company",
       );
     } finally {
       setIsSubmitting(false);
@@ -78,9 +78,7 @@ export function CreateCompanyDialog() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create New Company</DialogTitle>
-          <DialogDescription>
-            Add a new company.
-          </DialogDescription>
+          <DialogDescription>Add a new company.</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -91,39 +89,21 @@ export function CreateCompanyDialog() {
               <Input type="email" placeholder="john@example.com" />
             </FormFieldInput>
             <FormFieldInput
+              className="space-y-2"
               control={form.control}
-              name="password"
-              label="Password"
+              name="phone"
+              label="Phone"
             >
-              <PasswordInput placeholder="••••••••" />
+              <Input />
             </FormFieldInput>
             <FormFieldInput
+              className="space-y-2"
               control={form.control}
-              name="confirmPassword"
-              label="Confirm Password"
+              name="address"
+              label="Address"
             >
-              <PasswordInput placeholder="••••••••" />
+              <Input />
             </FormFieldInput>
-            <FormFieldInput
-              control={form.control}
-              name="role"
-              label="Role"
-              render={(field) => (
-                <Select
-                  defaultValue={field.value}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a role" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {userRoleOptions.map(({ value, label }) => (
-                      <SelectItem value={value}>{label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
             <DialogFooter>
               <Button
                 type="button"

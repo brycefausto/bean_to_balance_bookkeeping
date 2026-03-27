@@ -160,9 +160,7 @@ export function EditUserDialog({
         </DialogContent>
       </Dialog>
       <ToggleActivateUserDialog 
-        userId={user.id}
-        userName={user.name}
-        deactivated={user.deactivated ?? false}
+        user={user}
         open={isActivateDialogOpen}
         onOpenChange={setIsActivateDialogOpen}
       />
