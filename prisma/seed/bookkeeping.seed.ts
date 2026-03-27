@@ -109,6 +109,7 @@ export async function seedBookkeepingData(prisma: PrismaClient) {
           balance: 0,
           ledgerCategory: LedgerCategory.JOURNAL_ENTRY,
           bookAccountId: account.id,
+          entryId: e.id,
         },
       });
     }

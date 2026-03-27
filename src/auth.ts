@@ -1,6 +1,7 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import { comparePassword } from "./lib/password.utils";
 import prisma from "./lib/prisma";
 
 type Role = "BOOKKEEPER" | "OWNER" | "ADMIN";
@@ -31,8 +32,6 @@ export class CustomAuthError extends CredentialsSignin {
   }
 }
 
-const baseUrl = process.env.BASE_URL || "http://localhost:3000";
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -49,27 +48,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         };
 
         try {
-          console.log("fetching at " + baseUrl);
-
-          const res = await fetch(`${baseUrl}/api/custom-login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
+          const user = await prisma.user.findUnique({
+            where: { email },
+            include: {
+              company: true,
             },
-            body: JSON.stringify({ email, password }),
           });
 
-          console.log("fetching done");
-
-          const data = await res.json();
-
-          console.log("data", data);
-
-          if (!res.ok) {
+          if (!user || !user.password) {
+            console.log("Invalid Credentials");
             throw new CustomAuthError("Invalid Credentials");
           }
+          const isValid = await comparePassword(password, user.password);
+          if (!isValid) throw new CustomAuthError("Invalid Credentials");
 
-          return data.user;
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            company: user.company ?? undefined,
+          };
         } catch (error: any) {
           throw new CustomAuthError(error.message);
         }

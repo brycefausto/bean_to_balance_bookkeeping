@@ -15,6 +15,7 @@ model User {
   bookAccounts      BookAccount[]
   journalEntries    JournalEntry[]
   journalEntryLines EntryLine[]
+  deactivated       Boolean?
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
 }

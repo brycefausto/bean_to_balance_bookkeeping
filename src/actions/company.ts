@@ -1,14 +1,34 @@
 "use server";
 
+import { CreateCompanyDto } from "@/interfaces/company.dto";
 import { checkAuth } from "@/lib/auth-utils";
 import { createCRUDMessage } from "@/lib/string.utils";
-import { UpdateCompanyData } from "@/schemas/company";
+import { CreateCompanyData, UpdateCompanyData } from "@/schemas/company";
 import { companyService } from "@/services/company.service";
 import { ActionResultState } from "@/types";
 import { Company, Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 const dataName = "company";
+
+export async function createCompanyAction(
+  data: CreateCompanyDto
+): Promise<ActionResultState<Company>> {
+  try {
+    await checkAuth(Role.ADMIN);
+    const company = await companyService.create(data);
+    revalidatePath("/company");
+
+    return {
+      success: true,
+      data: company,
+      message: createCRUDMessage(dataName, "create", "success"),
+    };
+  } catch (error: any) {
+    console.log(error.message);
+    return { message: createCRUDMessage(dataName, "create", "failed", error.message) };
+  }
+}
 
 export async function updateCompanyAction(
   id: string,

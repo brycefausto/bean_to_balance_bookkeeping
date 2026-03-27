@@ -1,5 +1,5 @@
-import { checkAuth } from "@/lib/auth-utils";
 import { EntryLineFilter, EntryLinesDto } from "@/interfaces/entry-line.dto";
+import { checkAuth } from "@/lib/auth-utils";
 import { getStartOfDay } from "@/lib/date.utils";
 import { EntryLine, PrismaClient, Role } from "@prisma/client";
 import { generalLedgerService } from "./general-ledger-service";
@@ -14,16 +14,22 @@ export class EntryLineService {
     await checkAuth(Role.OWNER, Role.BOOKKEEPER);
     const { entryLineDtos: entryLinesDto, deletedEntryLineIds } = data;
     const entryLines: EntryLine[] = [];
-    const totalDebit = entryLinesDto.reduce((current, entryLine) => current + (entryLine.debit ?? 0), 0);
-    const totalCredit = entryLinesDto.reduce((current, entryLine) => current + (entryLine.credit ?? 0), 0);
+    const totalDebit = entryLinesDto.reduce(
+      (current, entryLine) => current + (entryLine.debit ?? 0),
+      0
+    );
+    const totalCredit = entryLinesDto.reduce(
+      (current, entryLine) => current + (entryLine.credit ?? 0),
+      0
+    );
     if (totalDebit !== totalCredit) {
       throw new Error("Total debit and total credit is not balanced");
     }
     for (let entryLineDto of entryLinesDto) {
       const { id, date, bookAccountId, inventoryId, ...rest } = entryLineDto;
-      console.log({ entryLineDto });
+      let entryLine: EntryLine;
       if (!id) {
-        const entryLine = await prisma.entryLine.create({
+        entryLine = await prisma.entryLine.create({
           data: {
             ...rest,
             date: getStartOfDay(date),
@@ -38,17 +44,9 @@ export class EntryLineService {
             },
           },
         });
-        generalLedgerService.postLedgerEntry(bookAccountId, {
-          date: getStartOfDay(date),
-          item: rest.description ?? "",
-          postRef: rest.postRef ?? "",
-          debit: rest.debit, 
-          credit: rest.credit, 
-          ledgerCategory: "JOURNAL_ENTRY", 
-        })
         entryLines.push(entryLine);
       } else {
-        const entryLine = await prisma.entryLine.update({
+        entryLine = await prisma.entryLine.update({
           where: { id },
           data: {
             ...rest,
@@ -66,6 +64,15 @@ export class EntryLineService {
         });
         entryLines.push(entryLine);
       }
+      generalLedgerService.postLedgerEntry(bookAccountId, {
+        date: getStartOfDay(date),
+        item: rest.description ?? "",
+        postRef: rest.postRef ?? "",
+        debit: rest.debit,
+        credit: rest.credit,
+        ledgerCategory: "JOURNAL_ENTRY",
+        id: entryLine.id,
+      });
     }
 
     if (deletedEntryLineIds) {
@@ -123,8 +130,23 @@ export class EntryLineService {
   // DELETE
   async delete(id: string) {
     await checkAuth(Role.OWNER, Role.BOOKKEEPER);
-    return prisma.entryLine.delete({
+    await generalLedgerService.deleteByEntryLine(id);
+    await prisma.entryLine.delete({
       where: { id },
+    });
+  }
+
+  async deleteAllByJournalEntry(journalEntryId: string) {
+    await checkAuth(Role.OWNER, Role.BOOKKEEPER);
+    const ids = (
+      await prisma.entryLine.findMany({
+        where: { journalEntryId },
+        select: { id: true },
+      })
+    ).map((it) => it.id);
+    await generalLedgerService.deleteByEntryLines(ids);
+    await prisma.entryLine.deleteMany({
+      where: { journalEntryId },
     });
   }
 }

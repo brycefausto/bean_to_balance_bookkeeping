@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useEffect, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
 import { updateUserAction } from "@/actions/user";
 import { FormFieldInput } from "@/components/form/form-field-input";
@@ -24,13 +24,12 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { ChangePasswordDialog } from "./change-password-dialog";
 import EmailVerificationButton from "./email-verification-button";
-import { useRouter } from "next/navigation";
 
 export default function AccountForm({ user }: { user: User }) {
   const [isPending, startTransition] = useTransition();
   const [isPasswordDialogOpen, setIsPasswordDialogOpen] = useState(false);
   const { data: session, update } = useSession();
-  const defaultValues = useMemo(
+  const initialValues = useMemo(
     () => ({
       name: user.name ?? "",
       email: user.email ?? "",
@@ -43,15 +42,8 @@ export default function AccountForm({ user }: { user: User }) {
 
   const form = useForm<UpdateAccountData>({
     resolver: zodResolver(updateAccountSchema),
-    defaultValues,
+    values: initialValues,
   });
-  const { reset } = form;
-
-  useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues);
-    }
-  }, [defaultValues, reset]);
 
   function onSubmit(data: UpdateAccountData) {
     startTransition(async () => {

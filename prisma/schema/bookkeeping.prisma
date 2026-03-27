@@ -29,29 +29,28 @@ model JournalEntry {
 }
 
 model EntryLine {
-  id              String       @id @default(cuid())
+  id              String          @id @default(cuid())
   journalEntryId  String
-  journalEntry    JournalEntry @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  journalEntry    JournalEntry    @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
   date            DateTime
   bookAccountId   String
-  bookAccount     BookAccount  @relation(fields: [bookAccountId], references: [id], onDelete: Cascade)
+  bookAccount     BookAccount     @relation(fields: [bookAccountId], references: [id], onDelete: Cascade)
   bookAccountCode String
-  debit           Float?       @default(0)
-  credit          Float?       @default(0)
+  debit           Float?          @default(0)
+  credit          Float?          @default(0)
   ARLedger        ARLedger[]
   APLedger        APLedger[]
-  Inventory       Inventory?   @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
+  GeneralLedger   GeneralLedger?
+  Inventory       Inventory?      @relation(fields: [inventoryId], references: [id], onDelete: Cascade)
   inventoryId     String?
   Payroll         Payroll[]
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
   description     String?
   postRef         String?
 
   userId String @map("userId")
   user   User   @relation(fields: [userId], references: [id])
-
-  @@map("Entry")
 }
 
 model Customer {

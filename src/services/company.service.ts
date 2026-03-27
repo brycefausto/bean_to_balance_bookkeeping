@@ -1,4 +1,4 @@
-import { CreateCompanyDto, UpdateCompanyDto } from "@/interfaces/company.dto";
+import { CompanyQueryParams, CreateCompanyDto, UpdateCompanyDto } from "@/interfaces/company.dto";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -15,12 +15,12 @@ export class CompanyService {
     });
   }
 
-  async find(page: number = 1, pageSize: number = 10) {
-    const skip = (page - 1) * pageSize;
+  async find({ page = 0, limit = 10, search = "" }: CompanyQueryParams) {
+    const skip = (page - 1) * limit;
 
     const data = await prisma.company.findMany({
       skip,
-      take: pageSize,
+      take: limit,
       orderBy: {
         createdAt: "desc",
       },
@@ -30,7 +30,7 @@ export class CompanyService {
 
     return {
       data,
-      totalPages: Math.ceil(total / pageSize),
+      totalPages: Math.ceil(total / limit),
       currentPage: page,
     };
   }
@@ -55,7 +55,7 @@ export class CompanyService {
   }
 
   async delete(id: string) {
-    return prisma.company.delete({
+    await prisma.company.delete({
       where: { id },
     });
   }

@@ -1,6 +1,6 @@
 "use client";
 
-export default function Loading() {
+export default function LoadingSpinner() {
   return (
     <div className='flex justify-center items-center min-h-[300px] h-[500px]'>
       <div className='w-[200px] h-[200px]'>

@@ -8,7 +8,6 @@ const prisma = new PrismaClient();
 export class UserService {
   // CREATE
   async create(data: CreateUserDto) {
-    await checkAuth(Role.ADMIN);
     return prisma.user.create({
       data,
     });
@@ -71,8 +70,10 @@ export class UserService {
   }
 
   // UPDATE
-  async update(id: string, { emailVerified: emailVerifiedBoolean, ...data }: UpdateUserDto) {
-    await checkAuth(Role.ADMIN);
+  async update(
+    id: string,
+    { emailVerified: emailVerifiedBoolean, ...data }: UpdateUserDto
+  ) {
     // Unverify email when the email is updated
     const user = await prisma.user.findUnique({
       where: { id, email: data.email },
@@ -93,10 +94,21 @@ export class UserService {
     }
   }
 
+  async toggleActivation(id: string) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (user) {
+      return prisma.user.update({
+        where: { id },
+        data: { deactivated: !!user.deactivated },
+      });
+    }
+  }
+
   // DELETE
   async delete(id: string) {
-    await checkAuth(Role.ADMIN);
-    return prisma.user.delete({
+    await prisma.user.delete({
       where: { id },
     });
   }

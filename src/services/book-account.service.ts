@@ -150,7 +150,7 @@ export class BookAccountService {
 
   // DELETE
   async delete(id: string) {
-    return prisma.bookAccount.delete({
+    await prisma.bookAccount.delete({
       where: { id },
     });
   }

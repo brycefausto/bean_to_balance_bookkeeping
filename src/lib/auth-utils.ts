@@ -23,6 +23,13 @@ export async function checkAuth(...requiredRoles: Role[]) {
   }
 }
 
+export async function checkSelfAuthOrAdmin(userId: string) {
+  const session = await auth();
+  if ((session?.user?.id == userId) || session?.user?.role == Role.ADMIN) {
+    throw new Error("Unauthorized");
+  }
+}
+
 export async function getUserSession() {
   const session = await auth();
   if (!session?.user?.id) {

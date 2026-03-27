@@ -8,6 +8,8 @@ model GeneralLedger {
   balance        Float?         @default(0)
   bookAccountId  String
   bookAccount    BookAccount    @relation(fields: [bookAccountId], references: [id])
+  entryId        String?        @unique
+  entry          EntryLine?     @relation(fields: [entryId], references: [id])
   ledgerCategory LedgerCategory
   createdAt      DateTime       @default(now())
 }

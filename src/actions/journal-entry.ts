@@ -104,6 +104,7 @@ export async function deleteJournalEntryAction(
 ): Promise<ActionResultState> {
   try {
     await journalService.delete(id);
+    await
     revalidatePath("/journal-entries");
 
     return {

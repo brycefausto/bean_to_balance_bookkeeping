@@ -1,12 +1,12 @@
-import { checkAuth } from "@/lib/auth-utils";
 import {
   CreateJournalEntryDto,
   JournalEntryFilter,
   UpdateJournalEntryDto,
 } from "@/interfaces/journal.dto";
+import { checkAuth } from "@/lib/auth-utils";
 import { getStartOfDay } from "@/lib/date.utils";
-import { JournalEntry, JournalType, PrismaClient, Role } from "@prisma/client";
-import { DateTime } from "luxon";
+import { PrismaClient, Role } from "@prisma/client";
+import { entryLineService } from "./entry-line.service";
 
 const prisma = new PrismaClient();
 export class JournalService {
@@ -25,49 +25,6 @@ export class JournalService {
         },
       },
     });
-  }
-
-  async createAllJournals(
-    userId: string,
-    companyId: string,
-    date: Date,
-    isCopy: boolean
-  ) {
-    await checkAuth(Role.OWNER, Role.BOOKKEEPER);
-    const journalTypes = Object.values(JournalType);
-    const newJournalEntries: JournalEntry[] = [];
-
-    for (let journalType of journalTypes) {
-      let description: string | null = null;
-      if (isCopy) {
-        const existingJournalEntry = await prisma.journalEntry.findFirst({
-          where: { journalType, companyId },
-        });
-
-        if (existingJournalEntry) {
-          description = existingJournalEntry.description;
-        }
-      }
-
-      const journalEntry = await prisma.journalEntry.create({
-        data: {
-          description,
-          journalType,
-          date: date
-            ? DateTime.fromJSDate(date).startOf("day").toJSDate()
-            : DateTime.now().startOf("day").toJSDate(),
-          user: {
-            connect: { id: userId },
-          },
-          company: {
-            connect: { id: companyId },
-          },
-        },
-      });
-      newJournalEntries.push(journalEntry);
-    }
-
-    return newJournalEntries;
   }
 
   async find(
@@ -160,7 +117,8 @@ export class JournalService {
   // DELETE
   async delete(id: string) {
     await checkAuth(Role.OWNER, Role.BOOKKEEPER);
-    return prisma.journalEntry.delete({
+    await entryLineService.deleteAllByJournalEntry(id);
+    await prisma.journalEntry.delete({
       where: { id },
     });
   }

@@ -24,20 +24,12 @@ import {
 } from "@/components/ui/table";
 import usePageUtils from "@/hooks/use-page-utils";
 import { toDateString } from "@/lib/date.utils";
-import { User } from "@prisma/client";
-import {
-  IconDots,
-  IconEdit,
-  IconLoader,
-  IconTrash,
-  IconUserCheck,
-  IconUserOff,
-} from "@tabler/icons-react";
+import { Company } from "@prisma/client";
+import { IconDots, IconEdit, IconLoader, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
-import { CreateUserDialog } from "./create-user-dialog";
+import { CreateCompanyDialog } from "./create-company-dialog";
 import { DeleteUserDialog } from "./delete-user-dialog";
-import { EditUserDialog } from "./edit-user-dialog";
-import { ToggleActivateUserDialog } from "./toggle-activate-user-dialog";
+import { EditCompanyDialog } from "./edit-user-dialog";
 
 // // User type definition based on the schema
 // type User = {
@@ -49,11 +41,11 @@ import { ToggleActivateUserDialog } from "./toggle-activate-user-dialog";
 //   createdAt: string;
 // };
 
-export default function UserList({
-  users,
+export default function CompanyList({
+  companies,
   totalPages,
 }: {
-  users: User[];
+  companies: Company[];
   totalPages: number;
 }) {
   const authUser = getUserFromSession();
@@ -61,17 +53,12 @@ export default function UserList({
   const [error, setError] = useState<string | null>(null);
 
   // Edit user state
-  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [editingUser, setEditingUser] = useState<Company | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   // Delete user state
-  const [deletingUser, setDeletingUser] = useState<User | null>(null);
+  const [deletingUser, setDeletingUser] = useState<Company | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  const [toggleActivatingUser, setToggleActivatingUser] = useState<User | null>(
-    null
-  );
-  const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false);
 
   const {
     page,
@@ -83,13 +70,13 @@ export default function UserList({
   } = usePageUtils();
 
   // Handle edit user
-  const handleEditUser = (user: User) => {
+  const handleEditUser = (user: Company) => {
     setEditingUser(user);
     setIsEditDialogOpen(true);
   };
 
   // Handle delete user
-  const handleDeleteUser = (user: User) => {
+  const handleDeleteUser = (user: Company) => {
     setDeletingUser(user);
     setIsDeleteDialogOpen(true);
   };
@@ -98,9 +85,9 @@ export default function UserList({
     <div className="p-4 sm:p-6 md:p-8 space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-xl sm:text-2xl font-semibold">Users</h1>
+          <h1 className="text-xl sm:text-2xl font-semibold">Companies</h1>
           <p className="text-sm text-muted-foreground">
-            Manage your users and their permissions
+            Manage companies
           </p>
         </div>
         <div className="flex gap-2">
@@ -110,7 +97,7 @@ export default function UserList({
             onKeyDown={handleSearchEnter}
             onClick={handleSearchClick}
           />
-          <CreateUserDialog />
+          <CreateCompanyDialog />
         </div>
       </div>
 
@@ -135,15 +122,12 @@ export default function UserList({
                 <TableHead>Email</TableHead>
                 <TableHead className="hidden md:table-cell">Role</TableHead>
                 <TableHead className="hidden md:table-cell">Verified</TableHead>
-                <TableHead className="hidden md:table-cell">
-                  Is Active
-                </TableHead>
                 <TableHead className="hidden lg:table-cell">Created</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {users.length === 0 ? (
+              {companies.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={6}
@@ -153,39 +137,28 @@ export default function UserList({
                   </TableCell>
                 </TableRow>
               ) : (
-                users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
+                companies.map((company) => (
+                  <TableRow key={company.id}>
+                    <TableCell className="font-medium">{company.name}</TableCell>
                     <TableCell>
-                      {user.email}
-                      {user.id == authUser.id && (
+                      {company.email}
+                      {company.id == authUser.id && (
                         <Badge variant="outline" className="ml-2">
                           Current User
                         </Badge>
                       )}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          user.role === "ADMIN"
-                            ? "bg-primary/10 text-primary"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {user.role}
-                      </span>
+                      {company.phone}
                     </TableCell>
                     <TableCell className="hidden md:table-cell">
-                      {user.emailVerified ? "Yes" : "No"}
-                    </TableCell>
-                    <TableCell className="hidden md:table-cell">
-                      {user.deactivated ? "Inactive" : "Active"}
+                      {company.address}
                     </TableCell>
                     <TableCell className="hidden lg:table-cell">
-                      {toDateString(user.createdAt)}
+                      {toDateString(company.createdAt)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {authUser.id != user.id && (
+                      {authUser.id != company.id && (
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon">
@@ -197,30 +170,14 @@ export default function UserList({
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
-                              onClick={() => handleEditUser(user)}
+                              onClick={() => handleEditUser(company)}
                             >
                               <IconEdit className="mr-2 h-4 w-4" />
                               Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-destructive focus:text-destructive"
-                              onClick={() => handleDeleteUser(user)}
-                            >
-                              {user.deactivated ? (
-                                <>
-                                  <IconUserCheck className="mr-2 h-4 w-4" />
-                                  Activate
-                                </>
-                              ) : (
-                                <>
-                                  <IconUserOff className="mr-2 h-4 w-4" />
-                                  Deactivate
-                                </>
-                              )}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              className="text-destructive focus:text-destructive"
-                              onClick={() => handleDeleteUser(user)}
+                              onClick={() => handleDeleteUser(company)}
                             >
                               <IconTrash className="mr-2 h-4 w-4" />
                               Delete
@@ -244,8 +201,8 @@ export default function UserList({
 
       {/* Edit User Dialog */}
       {editingUser && (
-        <EditUserDialog
-          user={editingUser}
+        <EditCompanyDialog
+          company={editingUser}
           open={isEditDialogOpen}
           onOpenChange={setIsEditDialogOpen}
         />
@@ -258,14 +215,6 @@ export default function UserList({
           userName={deletingUser.name}
           open={isDeleteDialogOpen}
           onOpenChange={setIsDeleteDialogOpen}
-        />
-      )}
-
-      {toggleActivatingUser && (
-        <ToggleActivateUserDialog
-          user={toggleActivatingUser}
-          open={isActivateDialogOpen}
-          onOpenChange={setIsActivateDialogOpen}
         />
       )}
     </div>

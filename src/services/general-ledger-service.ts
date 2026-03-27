@@ -1,15 +1,15 @@
-import { checkAuth } from "@/lib/auth-utils";
 import {
   JournalEntryFilter,
   UpdateJournalEntryDto,
 } from "@/interfaces/journal.dto";
-import { PrismaClient, Role } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 export class GeneralLedgerService {
   async postLedgerEntry(
     bookAccountId: string,
     entry: {
+      id: string;
       date: Date;
       item: string;
       postRef: string;
@@ -42,18 +42,27 @@ export class GeneralLedgerService {
       newBalance = previousBalance - debit + credit;
     }
 
+    const updateLedgerDto = {
+      date: entry.date,
+      item: entry.item,
+      postRef: entry.postRef,
+      debit,
+      credit,
+      balance: newBalance,
+      ledgerCategory: entry.ledgerCategory ?? "JOURNAL_ENTRY",
+      bookAccountId,
+    };
+
+    const createLedgerDto = {
+      ...updateLedgerDto,
+      entryId: entry.id,
+    };
+
     // 4️⃣ Create the new ledger entry
-    const newEntry = await prisma.generalLedger.create({
-      data: {
-        date: entry.date,
-        item: entry.item,
-        postRef: entry.postRef,
-        debit,
-        credit,
-        balance: newBalance,
-        ledgerCategory: entry.ledgerCategory ?? "JOURNAL_ENTRY",
-        bookAccountId,
-      },
+    const newEntry = await prisma.generalLedger.upsert({
+      where: { entryId: entry.id },
+      create: createLedgerDto,
+      update: updateLedgerDto,
     });
 
     return newEntry;
@@ -128,11 +137,11 @@ export class GeneralLedgerService {
 
   async findAll(companyId: string) {
     return prisma.generalLedger.findMany({
-      where: { 
+      where: {
         bookAccount: {
-          companyId
-        }
-       },
+          companyId,
+        },
+      },
       include: {
         bookAccount: true,
       },
@@ -154,7 +163,6 @@ export class GeneralLedgerService {
 
   // UPDATE
   async update(id: string, data: UpdateJournalEntryDto) {
-    await checkAuth(Role.OWNER, Role.BOOKKEEPER);
     return prisma.journalEntry.update({
       where: { id },
       data,
@@ -163,9 +171,20 @@ export class GeneralLedgerService {
 
   // DELETE
   async delete(id: string) {
-    await checkAuth(Role.OWNER, Role.BOOKKEEPER);
-    return prisma.journalEntry.delete({
+    await prisma.generalLedger.delete({
       where: { id },
+    });
+  }
+
+  async deleteByEntryLine(entryId: string) {
+    await prisma.generalLedger.delete({
+      where: { entryId },
+    });
+  }
+
+  async deleteByEntryLines(entryIds: string[]) {
+    await prisma.generalLedger.deleteMany({
+      where: { entryId: { in: entryIds } },
     });
   }
 }

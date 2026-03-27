@@ -14,3 +14,9 @@ export interface UpdateCompanyDto {
   phone: string;
   address: string;
 }
+
+export type CompanyQueryParams = {
+  search?: string
+  page?: number
+  limit?: number
+}

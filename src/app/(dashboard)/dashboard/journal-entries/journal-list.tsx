@@ -246,8 +246,7 @@ export default function JournalList({
             <AlertDialogHeader>
               <AlertDialogTitle>Are you sure?</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. This will permanently delete the
-                account from the chart of accounts.
+                This action cannot be undone. This will permanently delete the journal entry and related ledgers.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

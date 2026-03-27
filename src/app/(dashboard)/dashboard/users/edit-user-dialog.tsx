@@ -22,12 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { userRoleOptions } from "@/interfaces/user.dto";
+import { cn } from "@/lib/utils";
 import { UpdateUserData, updateUserSchema } from "@/schemas/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Role, User } from "@prisma/client";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { ToggleActivateUserDialog } from "./toggle-activate-user-dialog";
 
 interface EditUserDialogProps {
   user: User;
@@ -47,6 +49,7 @@ export function EditUserDialog({
     role: user.role,
     emailVerified: !!user.emailVerified,
   };
+  const [isActivateDialogOpen, setIsActivateDialogOpen] = useState(false);
 
   // Initialize form
   const form = useForm<UpdateUserData>({
@@ -81,57 +84,88 @@ export function EditUserDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Edit User</DialogTitle>
-          <DialogDescription>
-            Update user information and permissions.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormFieldInput control={form.control} name="name" label="Name">
-              <Input />
-            </FormFieldInput>
-            <FormFieldInput control={form.control} name="email" label="Email">
-              <Input type="email" />
-            </FormFieldInput>
-            <FormFieldInput control={form.control} name="role" label="Role">
-              <Select
-                defaultValue={form.getValues("role") as Role}
-                onValueChange={(value) => form.setValue("role", value as Role)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {userRoleOptions.map(({ value, label }) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </FormFieldInput>
-            <FormFieldInput control={form.control} name="emailVerified" label="Email Verified" variant="inline" render={(field) => (
-              <Checkbox checked={field.value as boolean} onCheckedChange={field.onChange} />
-            )} />
-            <DialogFooter>
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Update user information and permissions.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormFieldInput control={form.control} name="name" label="Name">
+                <Input />
+              </FormFieldInput>
+              <FormFieldInput control={form.control} name="email" label="Email">
+                <Input type="email" />
+              </FormFieldInput>
+              <FormFieldInput control={form.control} name="role" label="Role">
+                <Select
+                  defaultValue={form.getValues("role") as Role}
+                  onValueChange={(value) =>
+                    form.setValue("role", value as Role)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {userRoleOptions.map(({ value, label }) => (
+                      <SelectItem key={value} value={value}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormFieldInput>
+              <FormFieldInput
+                control={form.control}
+                name="emailVerified"
+                label="Email Verified"
+                variant="inline"
+                render={(field) => (
+                  <Checkbox
+                    checked={field.value as boolean}
+                    onCheckedChange={field.onChange}
+                  />
+                )}
+              />
               <Button
                 type="button"
-                variant="outline"
-                onClick={() => onOpenChange(false)}
+                className={
+                  user.deactivated
+                    ? "bg-green-500 hover:bg-green-300"
+                    : "bg-red-500 hover:bg-red-300"
+                }
+                onClick={() => setIsActivateDialogOpen(true)}
               >
-                Cancel
+                {user.deactivated ? "Activate User" : "Deactivate User"}
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Save Changes"}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenChange(false)}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save Changes"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      <ToggleActivateUserDialog 
+        userId={user.id}
+        userName={user.name}
+        deactivated={user.deactivated ?? false}
+        open={isActivateDialogOpen}
+        onOpenChange={setIsActivateDialogOpen}
+      />
+    </>
   );
 }
